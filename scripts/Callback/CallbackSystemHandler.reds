@@ -1,10 +1,7 @@
-public native class CallbackSystemHandler {
-    public native func AddTarget(target: ref<CallbackSystemTarget>) -> ref<CallbackSystemHandler>
-    public native func RemoveTarget(target: ref<CallbackSystemTarget>) -> ref<CallbackSystemHandler>
+// The game declares these with gameCallbackRunMode/gameCallbackLifetime, which have the same values.
 
-    public native func SetRunMode(runMode: CallbackRunMode) -> ref<CallbackSystemHandler>
-    public native func SetLifetime(lifetime: CallbackLifetime) -> ref<CallbackSystemHandler>
+@addMethod(CallbackSystemHandler)
+public native func SetRunMode(runMode: CallbackRunMode) -> ref<CallbackSystemHandler>
 
-    public native func IsRegistered() -> Bool
-    public native func Unregister()
-}
+@addMethod(CallbackSystemHandler)
+public native func SetLifetime(lifetime: CallbackLifetime) -> ref<CallbackSystemHandler>

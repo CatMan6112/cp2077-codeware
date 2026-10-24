@@ -45,5 +45,6 @@ RTTI_DEFINE_CLASS(App::ResourceEvent, {
     RTTI_PARENT(App::CallbackSystemEvent);
     RTTI_METHOD(GetPath);
     RTTI_METHOD(GetJobGroup);
+    RTTI_PROPERTY(resource);
     RTTI_GETTER(resource);
 });

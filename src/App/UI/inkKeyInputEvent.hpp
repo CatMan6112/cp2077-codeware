@@ -37,6 +37,9 @@ struct inkKeyInputEvent : Red::inkInputEvent
 
 RTTI_DEFINE_CLASS(App::inkKeyInputEvent, {
     RTTI_PARENT(Red::inkInputEvent);
+    RTTI_PROPERTY(key);
+    RTTI_PROPERTY(action);
+    RTTI_PROPERTY(character);
     RTTI_GETTER(key);
     RTTI_GETTER(action);
     RTTI_GETTER(character);

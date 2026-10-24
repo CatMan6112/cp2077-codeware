@@ -1,6 +1,7 @@
-// CODE GENERATED. DO NOT EDIT.
+// Declared by the game since 2.5, only the fields it leaves out are added here.
 
-public native class inkContainerNavigationController extends inkDiscreteNavigationController {
-  public native let overrideEntries: array<inkNavigationOverrideEntry>;
-  public native let useGlobalInput: Bool;
-}
+@addField(inkContainerNavigationController)
+public native let overrideEntries: array<inkNavigationOverrideEntry>;
+
+@addField(inkContainerNavigationController)
+public native let useGlobalInput: Bool;

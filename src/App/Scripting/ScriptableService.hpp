@@ -10,5 +10,4 @@ struct ScriptableService : Red::IScriptable
 }
 
 RTTI_DEFINE_CLASS(App::ScriptableService, {
-    RTTI_ABSTRACT();
 });

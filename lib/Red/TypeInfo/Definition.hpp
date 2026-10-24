@@ -974,6 +974,17 @@ struct SystemBuilder
         auto getterFunc = CClassStaticFunction::Create(gameType, getterNameStr.data(), getterNameStr.data(), &ScriptGetter);
         getterFunc->SetReturnType(CNamePool::Add(systemRefStr.data()));
 
+        // Since 2.5 the game registers getters of the same name for systems it implements itself. Replace those, so
+        // scripts get the instance of the type registered here and not the game's own.
+        for (auto& existingFunc : gameType->staticFuncs)
+        {
+            if (existingFunc->shortName == getterFunc->shortName)
+            {
+                existingFunc = getterFunc;
+                return;
+            }
+        }
+
         gameType->staticFuncs.PushBack(getterFunc);
     }
 

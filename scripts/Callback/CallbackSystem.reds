@@ -1,15 +1,5 @@
-public native class CallbackSystem extends IGameSystem {
-    public native func RegisterCallback(eventName: CName, target: ref<IScriptable>, function: CName, opt sticky: Bool) -> ref<CallbackSystemHandler>
-    public native func RegisterStaticCallback(eventName: CName, target: CName, function: CName, opt sticky: Bool) -> ref<CallbackSystemHandler>
+// CallbackSystem is declared by the game since 2.5. Its RegisterStaticCallback takes the target as an object, so the
+// Codeware signature is added as an overload. Both bind to the same native, which expects a class name.
 
-    public native func UnregisterCallback(eventName: CName, target: ref<IScriptable>, opt function: CName)
-    public native func UnregisterStaticCallback(eventName: CName, target: CName, opt function: CName)
-
-    public native func RegisterEvent(eventName: CName, opt eventType: CName) -> Bool
-
-    public native func DispatchEvent(eventObject: ref<CallbackSystemEvent>)
-    public native func DispatchEventAs(eventName: CName, eventObject: ref<CallbackSystemEvent>)
-}
-
-@addMethod(GameInstance)
-public static native func GetCallbackSystem() -> ref<CallbackSystem>
+@addMethod(CallbackSystem)
+public native func RegisterStaticCallback(eventName: CName, target: CName, function: CName, opt sticky: Bool) -> ref<CallbackSystemHandler>
