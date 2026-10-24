@@ -20,7 +20,7 @@ constexpr auto SetPoiMappinPhase = Core::RawVFunc<
                                                          const Red::gamedataMappinPhase aMappinPhase)>();
 
 constexpr auto GetPoiMappinPhase = Core::RawVFunc<
-    /* addr = */ 0x3C8,
+    /* addr = */ 0x430,
     /* type = */ Red::gamedataMappinPhase (Red::gamemappinsIMappinSystem::*)(const uint32_t aJournalPath)>();
 }
 

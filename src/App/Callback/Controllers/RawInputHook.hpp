@@ -63,9 +63,9 @@ protected:
 
     inline static void OnRawInput(Red::InkSystem* aSystem, uint64_t a2, Red::RawInputBuffer& aBuffer)
     {
-        if (!aSystem->layerManagers.IsEmpty() && !aBuffer.inputs.IsEmpty())
+        if (!aSystem->layerManagers.IsEmpty() && !aBuffer.GetInputs().IsEmpty())
         {
-            for (const auto& input : aBuffer.inputs)
+            for (const auto& input : aBuffer.GetInputs())
             {
                 if (input.action != Red::EInputAction::IACT_None && input.key != Red::EInputKey::IK_None)
                 {
