@@ -117,7 +117,7 @@ constexpr uint32_t ResourcePath_Create = 3998356057;
 
 constexpr uint32_t ResourceSerializer_ExecutePostLoad = 1350901460;
 constexpr uint32_t ResourceSerializer_SchedulePostLoadJobs = 3599579551;
-constexpr uint32_t ResourceSerializer_ScheduleFinalizeJobs = 949631709;
+constexpr uint32_t ResourceSerializer_ScheduleFinalizeJobs = 4272634361;
 constexpr uint32_t ResourceSerializer_OnDependenciesReady = 3892979844;
 constexpr uint32_t ResourceSerializer_OnResourceReady = 1147149338;
 
@@ -128,12 +128,11 @@ constexpr uint32_t RuntimeScene_AttachEntity = 3800374702;
 constexpr uint32_t RuntimeScene_DetachEntity = 1732384813;
 
 constexpr uint32_t RuntimeSystemEntity_AttachEntity = 1576214475;
-constexpr uint32_t RuntimeSystemEntity_DetachEntity = 1737563910;
 
 constexpr uint32_t RuntimeSystemWeather_GetEnvironmentDefinition = 1471948702;
 constexpr uint32_t RuntimeSystemWeather_GetWeatherState = 2679119876;
 constexpr uint32_t RuntimeSystemWeather_SetWeatherByName = 2334794340;
-constexpr uint32_t RuntimeSystemWeather_SetWeatherByIndex = 1821516328;
+constexpr uint32_t RuntimeSystemWeather_SetWeatherByIndex = 2987664085;
 
 constexpr uint32_t ScriptBundle_dtor = 3993832650;
 

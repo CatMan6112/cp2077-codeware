@@ -39,8 +39,16 @@ namespace Raw::WeatherScriptInterface
 using System = Core::OffsetPtr<0x40, Red::worldRuntimeSystemWeather*>;
 }
 
+namespace Raw::RuntimeScene
+{
+constexpr auto DetachEntity = Core::RawFunc<
+    /* addr = */ Red::AddressLib::RuntimeScene_DetachEntity,
+    /* type = */ void (*)(Red::world::RuntimeScene* aScene, const Red::Handle<Red::Entity>& aEntity)>();
+}
+
 namespace Raw::RuntimeSystemEntity
 {
+using Scene = Core::OffsetPtr<0x48, Red::world::RuntimeScene*>;
 using Spawner = Core::OffsetPtr<0x58, Red::EntitySpawner*>;
 
 constexpr auto AttachEntity = Core::RawFunc<
@@ -48,10 +56,10 @@ constexpr auto AttachEntity = Core::RawFunc<
     /* type = */ void (*)(Red::world::RuntimeSystemEntity* aSystem,
                           const Red::RuntimeSystemEntityAttachRequest& aRequest)>();
 
-constexpr auto DetachEntity = Core::RawFunc<
-    /* addr = */ Red::AddressLib::RuntimeSystemEntity_DetachEntity,
-    /* type = */ void (*)(Red::world::RuntimeSystemEntity* aSystem,
-                          const Red::Handle<Red::Entity>& aEntity)>();
+inline void DetachEntity(Red::world::RuntimeSystemEntity* aSystem, const Red::Handle<Red::Entity>& aEntity)
+{
+    Raw::RuntimeScene::DetachEntity(Scene::Ref(aSystem), aEntity);
+}
 }
 
 namespace Raw::RuntimeSystemWeather
@@ -69,7 +77,7 @@ constexpr auto SetWeatherByName = Core::RawFunc<
 constexpr auto SetWeatherByIndex = Core::RawFunc<
     /* addr = */ Red::AddressLib::RuntimeSystemWeather_SetWeatherByIndex,
     /* type = */ bool (*)(Red::worldRuntimeSystemWeather* aSystem, uint32_t aIndex, Red::CName aSource,
-                          float aBlendTime, float a5, uint32_t aPriority)>();
+                          float aBlendTime, float a5, uint32_t aPriority, bool a7)>();
 
 constexpr auto GetEnvironmentDefinition = Core::RawFunc<
     /* addr = */ Red::AddressLib::RuntimeSystemWeather_GetEnvironmentDefinition,
