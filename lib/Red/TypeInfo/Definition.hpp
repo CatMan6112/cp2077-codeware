@@ -1097,6 +1097,13 @@ struct ClassDefinition
             Specialization::Describe(type);
         }
 
+        // Since 2.5 the game registers its own classes under a few of these names as script aliases, which take
+        // precedence when scripts resolve a class. Point the alias back to this type.
+        if (auto* nativeName = rtti->scriptToNative.Get(type->name); nativeName && *nativeName != type->name)
+        {
+            *nativeName = type->name;
+        }
+
         type->flags.isNative = true;
 
         if constexpr (Detail::IsScriptableSystem<TClass>)
