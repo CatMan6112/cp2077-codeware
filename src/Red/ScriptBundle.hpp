@@ -42,16 +42,19 @@ struct ScriptDefinition
     virtual CName GetName() = 0;                    // 28
     virtual bool IsNative() = 0;                    // 30
 
-    CName name;     // 08
-    uint64_t unk10; // 10
+    CName name;                 // 08
+    uint8_t unk10[0x40 - 0x10]; // 10 - Grew by 0x28 in 2.5
 };
+
+// Since 2.5 every definition is 0x28 bytes larger. Only ScriptType, ScriptProperty and ScriptClass were verified,
+// the other derived layouts below are the 2.31 ones shifted by the new base size.
 
 struct ScriptFileInfo : ScriptDefinition
 {
-    uint32_t crc;   // 18
-    uint32_t index; // 1C
-    uint32_t hash;  // 20 - Murmur3 of path
-    CString path;   // 28
+    uint32_t crc;   // 40
+    uint32_t index; // 44
+    uint32_t hash;  // 48 - Murmur3 of path
+    CString path;   // 50
 };
 
 enum class EScriptType : uint8_t
@@ -67,10 +70,10 @@ enum class EScriptType : uint8_t
 
 struct ScriptType : ScriptDefinition
 {
-    CBaseRTTIType* rttiType;     // 18
-    ScriptDefinition* innerType; // 20
-    int32_t arraySize;           // 28
-    EScriptType metaType;        // 2C
+    CBaseRTTIType* rttiType;     // 40
+    ScriptDefinition* innerType; // 48
+    int32_t arraySize;           // 50
+    EScriptType metaType;        // 54
 };
 
 struct ScriptProperty : ScriptDefinition
@@ -88,13 +91,13 @@ struct ScriptProperty : ScriptDefinition
         uint16_t b08 : 1;          // 08
     };
 
-    CProperty* rttiProp;                // 18
-    ScriptDefinition* parent;           // 20
-    Flags flags;                        // 28
-    Map<CString, CString> defaults;     // 30
-    EScriptVisibility visibility;       // 58
-    HashMap<CName, CString> attributes; // 60
-    ScriptType* type;                   // 90
+    CProperty* rttiProp;                // 40
+    ScriptDefinition* parent;           // 48
+    Flags flags;                        // 50
+    Map<CString, CString> defaults;     // 58
+    EScriptVisibility visibility;       // 80
+    HashMap<CName, CString> attributes; // 88
+    ScriptType* type;                   // B8
 };
 
 struct ScriptClass;
@@ -110,18 +113,18 @@ struct ScriptParameter : ScriptDefinition
         uint8_t isConst : 1;        // 03
     };
 
-    CProperty* rttiProp;      // 18
-    ScriptFunction* function; // 20
-    ScriptType* type;         // 28
-    Flags flags;              // 30
+    CProperty* rttiProp;      // 40
+    ScriptFunction* function; // 48
+    ScriptType* type;         // 50
+    Flags flags;              // 58
 };
 
 struct ScriptLocalVar : ScriptDefinition
 {
-    CProperty* rttiProp;      // 18
-    ScriptFunction* function; // 20
-    ScriptType* type;         // 28
-    uint8_t unk30;            // 30
+    CProperty* rttiProp;      // 40
+    ScriptFunction* function; // 48
+    ScriptType* type;         // 50
+    uint8_t unk30;            // 58
 };
 
 struct ScriptFunction : ScriptDefinition
@@ -148,24 +151,24 @@ struct ScriptFunction : ScriptDefinition
         uint32_t isScripted : 1;   // 11 - Seems pointless, for all functions isScripted != isNative
     };
 
-    CBaseFunction* rttiFunc;             // 18
-    ScriptClass* parent;                 // 20
-    CName shortName;                     // 28
-    DynArray<ScriptParameter*> params;   // 30
-    DynArray<ScriptLocalVar*> localVars; // 40
-    HashMap<CName, CString> attributes;  // 50
-    ScriptType* returnType;              // 80
-    uint16_t unk88;                      // 88
-    ScriptFunction* overridden;          // 90
-    Flags flags;                         // 98
-    CName operatorName;                  // A0
-    uint8_t castValue;                   // A8
-    EScriptVisibility visibility;        // A9
-    DynArray<uint8_t> code;              // B0
-    ScriptFileInfo* sourceFile;          // C0
-    uint32_t sourceLine;                 // C8
+    CBaseFunction* rttiFunc;             // 40
+    ScriptClass* parent;                 // 48
+    CName shortName;                     // 50
+    DynArray<ScriptParameter*> params;   // 58
+    DynArray<ScriptLocalVar*> localVars; // 68
+    HashMap<CName, CString> attributes;  // 78
+    ScriptType* returnType;              // A8
+    uint16_t unk88;                      // B0
+    ScriptFunction* overridden;          // B8
+    Flags flags;                         // C0
+    CName operatorName;                  // C8
+    uint8_t castValue;                   // D0
+    EScriptVisibility visibility;        // D1
+    DynArray<uint8_t> code;              // D8
+    ScriptFileInfo* sourceFile;          // E8
+    uint32_t sourceLine;                 // F0
 };
-RED4EXT_ASSERT_SIZE(ScriptFunction, 0xD0);
+RED4EXT_ASSERT_SIZE(ScriptFunction, 0xF8);
 
 struct ScriptClass : ScriptDefinition
 {
@@ -178,57 +181,56 @@ struct ScriptClass : ScriptDefinition
         uint8_t isStruct : 1;     // 04
     };
 
-    CClass* rttiClass;                    // 18
-    ScriptClass* parent;                  // 20
-    DynArray<ScriptProperty*> properties; // 28
-    DynArray<ScriptProperty*> overrides;  // 38
-    DynArray<ScriptFunction*> functions;  // 48
-    HashMap<CName, CString> attributes;   // 58
-    EScriptVisibility visibility;         // 88
-    Flags flags;                          // 89
+    CClass* rttiClass;                    // 40
+    ScriptClass* parent;                  // 48
+    DynArray<ScriptProperty*> properties; // 50
+    DynArray<ScriptProperty*> overrides;  // 60
+    uint8_t unk70[0x90 - 0x70];           // 70 - Added in 2.5
+    DynArray<ScriptFunction*> functions;  // 90
+    HashMap<CName, CString> attributes;   // A0
+    EScriptVisibility visibility;         // D0
+    Flags flags;                          // D1
 };
 
 struct ScriptConstant : ScriptDefinition
 {
-    int64_t rttiValue;        // 18 - Used only for natives
-    ScriptDefinition* parent; // 20 - Enum or Bitfield
-    int64_t value;            // 28
-    bool isNative;            // 30
+    int64_t rttiValue;        // 40 - Used only for natives
+    ScriptDefinition* parent; // 48 - Enum or Bitfield
+    int64_t value;            // 50
+    bool isNative;            // 58
 };
 
 struct ScriptEnum : ScriptDefinition
 {
-    CEnum* rttiEnum;                     // 18
-    DynArray<ScriptConstant*> constants; // 20
-    uint8_t size;                        // 30
-    bool isNative;                       // 31
-    EScriptVisibility visibility;        // 32
+    CEnum* rttiEnum;                     // 40
+    DynArray<ScriptConstant*> constants; // 48
+    uint8_t size;                        // 58
+    bool isNative;                       // 59
+    EScriptVisibility visibility;        // 5A
 };
 
 struct ScriptBitfield : ScriptDefinition
 {
-    CBitfield* rttiBitfield;             // 18
-    DynArray<ScriptConstant*> constants; // 20
-    uint8_t size;                        // 30
-    bool isNative;                       // 31
-    EScriptVisibility visibility;        // 32
+    CBitfield* rttiBitfield;             // 40
+    DynArray<ScriptConstant*> constants; // 48
+    uint8_t size;                        // 58
+    bool isNative;                       // 59
+    EScriptVisibility visibility;        // 5A
 };
 
 struct ScriptBundle
 {
-    HashMap<CName, ScriptDefinition*> definitionsByName; // 00
-    HashMap<CName, ScriptFunction*> functionsByName;     // 30
-    HashMap<CName, ScriptType*> typesByName;             // 60
-    DynArray<ScriptFileInfo*> files;                     // 90
-    DynArray<ScriptFunction*> globals;                   // A0
-    DynArray<ScriptEnum*> enums;                         // B0
-    DynArray<ScriptBitfield*> bitfields;                 // C0
-    DynArray<ScriptClass*> classes;                      // D0
-    DynArray<ScriptType*> types;                         // E0
-    DynArray<CString> strings;                           // F0
-    HashMap<CName, void*> unk100;                        // 100
-    SharedSpinLock typesLock;                            // 130
-    CRITICAL_SECTION unk138;                             // 138
+    uint64_t unk00;                                      // 00 - Added in 2.5
+    HashMap<CName, ScriptDefinition*> definitionsByName; // 08
+    HashMap<CName, ScriptFunction*> functionsByName;     // 38
+    HashMap<CName, ScriptType*> typesByName;             // 68
+    DynArray<ScriptFileInfo*> files;                     // 98
+    DynArray<ScriptFunction*> globals;                   // A8
+    DynArray<ScriptEnum*> enums;                         // B8
+    DynArray<ScriptBitfield*> bitfields;                 // C8
+    DynArray<ScriptClass*> classes;                      // D8
+    DynArray<ScriptType*> types;                         // E8
+    DynArray<CString> strings;                           // F8
+    // 2.5 has more fields up to at least 0x1E0, not mapped
 };
-RED4EXT_ASSERT_SIZE(ScriptBundle, 0x160);
 }
